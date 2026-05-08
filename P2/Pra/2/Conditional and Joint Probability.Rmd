@@ -1,0 +1,89 @@
+---
+title: "Conditional and Joint Probability"
+author: "Barraza Torres Jesús Daniel"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+## Exercise 1
+
+A small survey was conducted with 50 people regarding whether they own a car and whether they have a driver's license.
+
+### Data (Example)
+
+You can modify the values below or use the following as an example to work with:
+
+```{r}
+# Example frequency table:
+datos <- data.frame(
+  car = rep(c("Si", "Si", "No", "No"), 1),
+  licence = rep(c("Si", "No", "Si", "No"), 1),
+  frequency = c(20, 15, 5, 10)
+)
+
+# Total people
+total <- sum(datos$frequency)
+cat("Total people: ", total)
+```
+
+1. Joint probability that a person has a car and a driver's license.
+```{r}
+#Sum of cases (for later)
+freq_both <- datos$frequency[datos$car == "Si" & datos$licence == "Si"]
+joint_prob <- freq_both / total
+
+#Probability
+cat("Probability that a person has both car and license: ", joint_prob*100, "%")
+```
+
+2. Conditional probability that a person has a driver's license given they have a car.
+```{r}
+#Sum of cases (for later)
+freq_car <- sum(datos$frequency[datos$car == "Si"])
+freq_license <- sum(datos$frequency[datos$licence == "Si"])
+
+#Probability
+prob_cartolicense <- (freq_both/freq_car)
+cat("Total people who has a licence given they have a car: ", prob_cartolicense*100, "%")
+```
+
+3. Conditional probability that a person has a car given they have a driver's license.
+```{r}
+#Probability
+prob_licensetocar <- (freq_both/freq_license)
+cat("Total people who has a licence given they have a car: ", prob_licensetocar*100, "%")
+```
+
+4. Check whether owning a car and having a driver's license are independent events.
+```{r}
+#Probability
+prob_car=freq_car/total
+prob_licence=freq_license/total
+
+#If because why not
+if (prob_car == prob_licensetocar & prob_licence == prob_cartolicense) {
+  cat("The events are independent")
+} else {
+  cat("The events are dependent")
+}
+```
+
+5. Create a Venn diagram representing the sets from the exercise and their intersection 
+```{r}
+library(VennDiagram)
+
+venn.plot <- draw.pairwise.venn(
+             area1 = freq_car,
+             area2 = freq_license,
+             cross.area = freq_both,
+             category = c("Car", "License"),
+             fill = c("#953472", "#126593" ),
+             ity = "black",
+             cex = 2,
+             cat.cex = 2,
+             cat.col = c("#311225", "#063045")
+             )
+```
+
